@@ -1,0 +1,38 @@
+# blue-deployment.yaml
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: blue
+  name: blue-deployment
+  annotations:
+    kubernetes.io/change-cause: "Initail Demo application"
+    kubernetes.io/description: "Recreate Demo application"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: blue
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: blue
+    spec:
+      containers:
+      - image: nationminu/blue:v1
+        name: blue
+        imagePullPolicy: Always
+        livenessProbe:
+          tcpSocket:
+            port: 80
+          initialDelaySeconds: 15
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /version.html
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 3

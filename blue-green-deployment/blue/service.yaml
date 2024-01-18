@@ -1,0 +1,16 @@
+# v1-service.yaml
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: demo
+  name: blue-green-svc
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: demo
+    version: green

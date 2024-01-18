@@ -1,0 +1,9 @@
+body {
+    background-color: blue;
+    color: white;
+}
+.container {
+    width: auto;
+    max-width: 680px;
+    padding: 0 15px;
+}

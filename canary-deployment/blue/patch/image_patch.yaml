@@ -1,0 +1,7 @@
+---
+spec:
+  template:
+    spec:
+      containers:
+      - name: blue
+        image: nationminu/blue:v2

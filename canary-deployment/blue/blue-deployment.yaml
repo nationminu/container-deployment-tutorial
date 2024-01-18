@@ -1,0 +1,50 @@
+# blue-deployment.yaml
+# kubectl create deployment blue --image nationminu/blue:v1 --namespace deployment-demo --dry-run=client -o yaml
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: blue
+  name: blue-deployment
+  annotations:
+    kubernetes.io/change-cause: "Initail Demo application"
+    kubernetes.io/description: "Canary Demo Blue application"
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: blue
+  # strategy:
+  ## availableReplicas = replicas - maxUnavailable < availableReplicas < replicas + maxSurge
+  #   rollingUpdate:
+  #     maxSurge: 2 # 롤링 업데이트 중 동시에 생성하는 파드 갯수(default: 25%)
+  #     maxUnavailable: 0 # 롤링 업데이트 중 동시에 삭제할 수 있는 파드 갯수(default: 25%)
+  #   type: RollingUpdate
+  #   type: Recreate
+  template:
+    metadata:
+      labels:
+        app: blue
+    spec:
+      containers:
+      - image: nationminu/blue:v1
+        name: blue
+        imagePullPolicy: Always
+        livenessProbe:
+          tcpSocket:
+            port: 80
+          initialDelaySeconds: 15
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /version.html
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 3
+        # startupProbe:
+        #   httpGet:
+        #     path: /version.html
+        #     port: 80
+        #   initialDelaySeconds: 5
+        #   periodSeconds: 5

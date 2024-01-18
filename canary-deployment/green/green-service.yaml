@@ -1,0 +1,16 @@
+# blue-service.yaml
+# kubectl expose deployment blue --name blue-svc --port 80 --namespace deployment-demo --dry-run=client -o yaml
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: green
+  name: green-svc
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: green

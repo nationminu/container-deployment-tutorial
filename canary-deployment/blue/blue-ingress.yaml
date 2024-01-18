@@ -1,0 +1,21 @@
+# blue-ingress.yaml
+# kubectl create ingress blue-ing --class=nginx --rule="canary.handle.local/*=blue-svc:80" --namespace deployment-demo --dry-run=client -o yaml
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: blue-canary-ing
+  annotations:
+    kubernetes.io/ingress.class: nginx
+spec:
+  rules:
+  - host: canary.handle.local
+    http:
+      paths:
+      - backend:
+          service:
+            name: blue-svc
+            port:
+              number: 80
+        path: /
+        pathType: ImplementationSpecific

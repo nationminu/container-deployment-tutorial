@@ -1,0 +1,39 @@
+# v2-deployment.yaml
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: demo
+    version: green
+  name: green-deployment
+  annotations:
+    kubernetes.io/change-cause: "Initail Demo application"
+    kubernetes.io/description: "Blue-Green Demo Green application"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: demo
+      version: green
+  template:
+    metadata:
+      labels:
+        app: demo
+        version: green
+    spec:
+      containers:
+      - image: nationminu/green:v1
+        name: green
+        imagePullPolicy: Always
+        livenessProbe:
+          tcpSocket:
+            port: 80
+          initialDelaySeconds: 15
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /version.html
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 3
